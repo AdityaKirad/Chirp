@@ -3,20 +3,21 @@ import { Calendar } from "./ui/calendar";
 import { Input } from "./ui/input";
 import { Label } from "./ui/label";
 import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover";
-import { type FieldMetadata } from "@conform-to/react";
+import { type FieldMetadata, unstable_useControl as useControl } from "@conform-to/react";
 import { format } from "date-fns";
 import { CalendarIcon } from "lucide-react";
-import { useMultiStepForm } from "~/lib/hooks";
-import { Profile as ProfileType } from "~/lib/schema";
+import { useRef } from "react";
+import { ProfileType } from "~/lib/schema";
 import { cn } from "~/lib/utils";
 
 type Field = FieldMetadata<string, ProfileType, string[]>;
+type DOBField = FieldMetadata<Date>;
 
 type Props = {
   fields: Required<{
     name: Field;
     email: Field;
-    // dob?: Field;
+    dob: DOBField;
   }>;
 };
 
@@ -25,14 +26,22 @@ export default function Profile({ fields }: Props) {
     <>
       <Name field={fields.name} />
       <Email field={fields.email} />
-      {/* <DOB {...fields.dob} /> */}
+      <DOB field={fields.dob} />
     </>
   );
 }
 
+function Field({ children }: { children: React.ReactNode }) {
+  return <div className="space-y-2">{children}</div>;
+}
+
+function FieldError({ children }: { children: React.ReactNode }) {
+  return <p className="text-sm text-red-500">{children}</p>;
+}
+
 function Name({ field }: { field: Field }) {
   return (
-    <div className="space-y-2">
+    <Field>
       <Label htmlFor="name">Name</Label>
       <Input
         type="text"
@@ -44,17 +53,16 @@ function Name({ field }: { field: Field }) {
         name={field.name}
         defaultValue={field.initialValue}
       />
-      <span>{field.errors}</span>
-    </div>
+      <FieldError>{field.errors}</FieldError>
+    </Field>
   );
 }
 
 function Email({ field }: { field: Field }) {
   return (
-    <div>
+    <Field>
       <Label htmlFor="email">Email</Label>
       <Input
-        className="mt-2"
         type="email"
         placeholder="Your email"
         id="email"
@@ -62,26 +70,47 @@ function Email({ field }: { field: Field }) {
         name={field.name}
         defaultValue={field.initialValue}
       />
-      <span>{field.errors}</span>
-    </div>
+      <FieldError>{field.errors}</FieldError>
+    </Field>
   );
 }
 
-function DOB(props: Field) {
-  const { selected, handleChange } = useMultiStepForm((state) => state.dob);
+function DOB({ field }: { field: DOBField }) {
+  const triggerRef = useRef<HTMLButtonElement>(null);
+  const control = useControl(field);
+  const controlValue = control.value;
   return (
-    <div className="space-y-2">
+    <Field>
       <Label htmlFor="dob">Date of birth</Label>
       <p className="text-sm text-muted-foreground">
         This will not be shown publicly. Confirm your own age, even if this account is for a business, a pet, or
         something else.
       </p>
-      <Input type="hidden" name="dob" value={selected ? format(selected, "MMM d, yyyy") : "Pick a date"} />
+      <Input
+        type="hidden"
+        ref={control.register}
+        name={field.name}
+        defaultValue={
+          controlValue
+            ? format(new Date(controlValue), "yyyy-MM-dd")
+            : field.initialValue
+              ? format(new Date(field.initialValue), "yyyy-MM-dd")
+              : ""
+        }
+        onFocus={() => triggerRef.current?.focus()}
+        tabIndex={-1}
+        aria-hidden
+      />
 
       <Popover>
         <PopoverTrigger asChild>
-          <Button className={cn("w-full justify-between", { "text-muted-foreground": !selected })} variant="outline">
-            <span>{selected ? format(selected, "MMM d, yyyy") : "Pick a date"}</span>
+          <Button
+            ref={triggerRef}
+            className={cn("w-full justify-between", {
+              "text-muted-foreground": !controlValue,
+            })}
+            variant="outline">
+            <span>{controlValue ? format(new Date(controlValue), "MMM d, yyyy") : "Pick a date"}</span>
             <CalendarIcon />
           </Button>
         </PopoverTrigger>
@@ -91,8 +120,8 @@ function DOB(props: Field) {
             captionLayout="dropdown-buttons"
             fromYear={1900}
             toYear={new Date().getFullYear()}
-            selected={selected}
-            onSelect={(e) => handleChange({ dob: e })}
+            selected={new Date(controlValue ?? "")}
+            onSelect={(e) => control.change(e?.toISOString() ?? "")}
             className=""
             classNames={{
               caption_dropdowns: "flex items-center gap-2",
@@ -105,6 +134,7 @@ function DOB(props: Field) {
           />
         </PopoverContent>
       </Popover>
-    </div>
+      <FieldError>{field.errors}</FieldError>
+    </Field>
   );
 }
