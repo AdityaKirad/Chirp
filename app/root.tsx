@@ -1,10 +1,5 @@
-import {
-  Links,
-  Meta,
-  Outlet,
-  Scripts,
-  ScrollRestoration,
-} from "@remix-run/react";
+import { Links, Meta, Outlet, Scripts, ScrollRestoration } from "@remix-run/react";
+import "~/globals.css";
 
 export function Layout({ children }: { children: React.ReactNode }) {
   return (
@@ -16,7 +11,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <Links />
       </head>
       <body>
-        {children}
+        <div className="min-h-screen">{children}</div>
         <ScrollRestoration />
         <Scripts />
       </body>

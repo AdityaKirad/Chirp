@@ -1,0 +1,80 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 0 0% 3.9%;
+    --foreground: 0 0% 98%;
+    --card: 0 0% 3.9%;
+    --card-foreground: 0 0% 98%;
+    --primary: 0 0% 98%;
+    --primary-foreground: 0 0% 9%;
+    --secondary: 0 0% 14.9%;
+    --secondary-foreground: 0 0% 98%;
+    --muted: 0 0% 14.9%;
+    --muted-foreground: 0 0% 63.9%;
+    --accent: 0 0% 14.9%;
+    --accent-foreground: 0 0% 98%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 0 0% 14.9%;
+    --input: 0 0% 14.9%;
+    --ring: 0 0% 83.1%;
+    --radius: 0.5rem;
+  }
+
+  /* For browsers that support clamp  */
+  @supports (font-size: clamp(1rem, 1vi, 1rem)) {
+    :root {
+      --fs-sm: clamp(0.7rem, 0.54vi + 0.49rem, 1rem);
+      --fs-base: clamp(0.88rem, 0.67vi + 0.61rem, 1.25rem);
+      --fs-lg: clamp(1.09rem, 0.84vi + 0.76rem, 1.56rem);
+      --fs-xl: clamp(1.37rem, 1.05vi + 0.95rem, 1.95rem);
+      --fs-2xl: clamp(1.71rem, 1.31vi + 1.19rem, 2.44rem);
+      --fs-3xl: clamp(2.14rem, 1.63vi + 1.48rem, 3.05rem);
+      --fs-4xl: clamp(2.67rem, 2.04vi + 1.85rem, 3.81rem);
+      --fs-5xl: clamp(3.34rem, 2.55vi + 2.32rem, 4.77rem);
+    }
+  }
+
+  /* For browsers that don't support clamp */
+  @supports not (font-size: clamp(1rem, 1vi, 1rem)) {
+    :root {
+      --fs-sm: 0.7rem;
+      --fs-base: 0.88rem;
+      --fs-lg: 1.09rem;
+      --fs-xl: 1.37rem;
+      --fs-2xl: 1.71rem;
+      --fs-3xl: 2.14rem;
+      --fs-4xl: 2.67rem;
+      --fs-5xl: 3.34rem;
+    }
+
+    @media screen and (min-width: 1536px) {
+      :root {
+        --fs-sm: 1rem;
+        --fs-base: 1.25rem;
+        --fs-lg: 1.56rem;
+        --fs-xl: 1.95rem;
+        --fs-2xl: 2.44rem;
+        --fs-3xl: 3.05rem;
+        --fs-4xl: 3.81rem;
+        --fs-5xl: 4.77rem;
+      }
+    }
+  }
+
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply max-w-full text-base overflow-x-hidden bg-background text-foreground transition-colors duration-300;
+  }
+
+  img {
+    @apply italic bg-cover bg-no-repeat;
+    shape-margin: 0.75rem;
+  }
+}

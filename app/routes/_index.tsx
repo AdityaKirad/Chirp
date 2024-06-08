@@ -1,40 +1,25 @@
 import type { MetaFunction } from "@remix-run/node";
+import { format } from "date-fns";
 
 export const meta: MetaFunction = () => {
-  return [
-    { title: "New Remix App" },
-    { name: "description", content: "Welcome to Remix!" },
-  ];
+  return [{ title: "Home" }, { name: "description", content: "Welcome to Remix!" }];
 };
 
-export default function Index() {
+const months: { index: number; value: string }[] = Array(12)
+  .fill(null)
+  .map((_, i) => ({
+    index: i + 1,
+    value: format(new Date(2022, i, 1), "MMM"),
+  }));
+
+export default function Page() {
+  console.log(months);
   return (
-    <div style={{ fontFamily: "system-ui, sans-serif", lineHeight: "1.8" }}>
-      <h1>Welcome to Remix</h1>
+    <div className="p-4">
       <ul>
-        <li>
-          <a
-            target="_blank"
-            href="https://remix.run/tutorials/blog"
-            rel="noreferrer"
-          >
-            15m Quickstart Blog Tutorial
-          </a>
-        </li>
-        <li>
-          <a
-            target="_blank"
-            href="https://remix.run/tutorials/jokes"
-            rel="noreferrer"
-          >
-            Deep Dive Jokes App Tutorial
-          </a>
-        </li>
-        <li>
-          <a target="_blank" href="https://remix.run/docs" rel="noreferrer">
-            Remix Docs
-          </a>
-        </li>
+        {months.map((month) => (
+          <li key={month.index}>{month.value}</li>
+        ))}
       </ul>
     </div>
   );
