@@ -1,12 +1,10 @@
 import { ActionFunction, LoaderFunction } from "@remix-run/node";
-import { Link } from "@remix-run/react";
-import { Form } from "@remix-run/react";
-import AuthLayout from "~/components/auth-layout";
+import { Link, Form } from "@remix-run/react";
 import GoogleLogin from "~/components/google-login";
 import { Button } from "~/components/ui/button";
 import { Input } from "~/components/ui/input";
 import { Separator } from "~/components/ui/separator";
-import { authenticator } from "~/services/auth.server";
+import { authenticator } from "~/services/authenticator.server";
 
 export const action: ActionFunction = async ({ request }) => {
   return await authenticator.authenticate("credentials", request, {
@@ -23,7 +21,8 @@ export const loader: LoaderFunction = async ({ request }) => {
 
 export default function Page() {
   return (
-    <AuthLayout title="Sign in to Twitter Clone">
+    <>
+      <h1>Sign in to Chirp</h1>
       <div className="flex flex-col gap-4">
         <GoogleLogin />
         <Separator />
@@ -41,9 +40,11 @@ export default function Page() {
       <p className="text-neutral-700">
         Don&apos;t have an account?
         <Button className="text-blue-500" variant="link" asChild>
-          <Link to="/auth/signup">Sign up</Link>
+          <Link to="/auth/signup" unstable_viewTransition>
+            Sign up
+          </Link>
         </Button>
       </p>
-    </AuthLayout>
+    </>
   );
 }

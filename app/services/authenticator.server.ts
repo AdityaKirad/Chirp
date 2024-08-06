@@ -1,11 +1,11 @@
 import { db } from "./db.server";
-import { sessionStorage } from "./session.server";
+import { authSessionStorage } from "./session/auth.server";
 import "@prisma/client";
 import { Authenticator, AuthorizationError } from "remix-auth";
 import { FormStrategy } from "remix-auth-form";
 import { GoogleStrategy } from "remix-auth-google";
 
-export const authenticator = new Authenticator(sessionStorage);
+export const authenticator = new Authenticator(authSessionStorage);
 
 const credentialStrategy = new FormStrategy(async ({ form }) => {
   const user = form.get("user") as string | undefined;

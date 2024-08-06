@@ -1,4 +1,4 @@
-import { Button } from "./ui/button";
+import { Button } from "./ui";
 import { NavLink } from "@remix-run/react";
 import { Bell, Bookmark, Home, List, Mail, Search, Settings, UserRound } from "lucide-react";
 import BrandLogo from "~/assets/logo-small.webp";

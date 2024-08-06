@@ -1,5 +1,5 @@
 import GoogleLogo from "./google-logo";
-import { Button } from "./ui/button";
+import { Button } from "./ui";
 import { Link } from "@remix-run/react";
 
 export default function GoogleLogin() {

@@ -1,9 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -14,46 +8,52 @@ datasource db {
 }
 
 model User {
-  id String @id @default(cuid())
+  id            String    @id
+  name          String
+  username      String    @unique
+  email         String    @unique
+  emailVerified Boolean
+  dob           DateTime
+  image         String
+  password      Password?
+  sessions      Session[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
-model Password {
+model Onboarding {
+  id           String        @id
+  name         String
+  email        String        @unique
+  dob          DateTime
+  verification Verification?
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+  expiresAt    DateTime
 }
 
 model Session {
+  id        String   @id
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  expiresAt DateTime
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
-// model Account {
-//   id            Int     @id @default(autoincrement())
-//   userId        Int @unique
-//   name          String
-//   username      String  @unique
-//   email         String  @unique
-//   password Passwords?
-//   providerType  String
-//   user          User    @relation(fields: [userId], references: [id], onDelete: Cascade)
-// }
+model Password {
+  userId String @unique
+  hash   String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+}
 
-// model Passwords {
-//   userId Int @unique
-//   user Account @relation(fields: [userId], references: [userId], onDelete: Cascade, onUpdate: Cascade)
-//   hash String
-// }
-
-// model Session {
-//   id           Int      @id @default(autoincrement())
-//   userId       Int
-//   sessionToken String   @unique
-//   expires      DateTime
-//   user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-// }
-
-// model User {
-//   id       Int       @id @default(autoincrement())
-//   name     String
-//   email    String    @unique
-//   image    String?
-//   dob      DateTime?
-//   accounts Account[]
-//   session  Session[]
-// }
+model Verification {
+  tempAccountId String     @unique
+  secret        String     @unique
+  algorithm     String
+  digits        Int
+  period        Int
+  tempAccount   Onboarding @relation(fields: [tempAccountId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+}

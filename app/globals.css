@@ -77,4 +77,23 @@
     @apply italic bg-cover bg-no-repeat;
     shape-margin: 0.75rem;
   }
+
+  input::-webkit-credentials-auto-fill-button,
+  input::-ms-reveal {
+    @apply hidden;
+  }
+}
+
+@layer utilities {
+  .loading {
+    mask: url(/loader.svg) no-repeat center / 100%;
+  }
+
+  .password-text-shadow {
+    text-shadow: 0 0 20px white;
+  }
+
+  .password-text-shadow::placeholder {
+    text-shadow: none;
+  }
 }
