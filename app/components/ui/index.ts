@@ -10,3 +10,4 @@ export * from "./popover";
 export * from "./select";
 export * from "./separator";
 export * from "./password-input";
+export * from "./field";

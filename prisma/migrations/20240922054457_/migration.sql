@@ -4,8 +4,8 @@ CREATE TABLE "User" (
     "name" TEXT NOT NULL,
     "username" TEXT NOT NULL,
     "email" TEXT NOT NULL,
-    "emailVerified" BOOLEAN NOT NULL,
-    "dob" DATETIME NOT NULL,
+    "emailVerified" BOOLEAN,
+    "dob" DATETIME,
     "image" TEXT NOT NULL,
     "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" DATETIME NOT NULL
@@ -17,8 +17,8 @@ CREATE TABLE "Onboarding" (
     "name" TEXT NOT NULL,
     "email" TEXT NOT NULL,
     "dob" DATETIME NOT NULL,
+    "verified" BOOLEAN NOT NULL,
     "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updatedAt" DATETIME NOT NULL,
     "expiresAt" DATETIME NOT NULL
 );
 
@@ -41,12 +41,16 @@ CREATE TABLE "Password" (
 
 -- CreateTable
 CREATE TABLE "Verification" (
-    "tempAccountId" TEXT NOT NULL,
+    "id" TEXT NOT NULL PRIMARY KEY,
+    "target" TEXT NOT NULL,
+    "type" TEXT NOT NULL,
+    "charSet" TEXT NOT NULL,
     "secret" TEXT NOT NULL,
     "algorithm" TEXT NOT NULL,
     "digits" INTEGER NOT NULL,
     "period" INTEGER NOT NULL,
-    CONSTRAINT "Verification_tempAccountId_fkey" FOREIGN KEY ("tempAccountId") REFERENCES "Onboarding" ("id") ON DELETE CASCADE ON UPDATE CASCADE
+    "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "expiresAt" DATETIME NOT NULL
 );
 
 -- CreateIndex
@@ -62,7 +66,4 @@ CREATE UNIQUE INDEX "Onboarding_email_key" ON "Onboarding"("email");
 CREATE UNIQUE INDEX "Password_userId_key" ON "Password"("userId");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "Verification_tempAccountId_key" ON "Verification"("tempAccountId");
-
--- CreateIndex
-CREATE UNIQUE INDEX "Verification_secret_key" ON "Verification"("secret");
+CREATE UNIQUE INDEX "Verification_target_type_key" ON "Verification"("target", "type");

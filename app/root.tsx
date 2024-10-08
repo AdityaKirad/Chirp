@@ -1,7 +1,17 @@
-import { Links, Meta, Scripts, ScrollRestoration, Outlet } from "@remix-run/react";
+import { json } from "@remix-run/node";
+import { Links, Meta, Scripts, ScrollRestoration, Outlet, useLoaderData } from "@remix-run/react";
+import { HoneypotProvider } from "remix-utils/honeypot/react";
 import "~/globals.css";
+import { honeypot } from "~/services/honeypot.server";
+
+export function loader() {
+  const honetpotProps = honeypot.getInputProps();
+
+  return json({ honetpotProps });
+}
 
 export default function App() {
+  const data = useLoaderData<typeof loader>();
   return (
     <html lang="en">
       <head>
@@ -11,9 +21,9 @@ export default function App() {
         <Links />
       </head>
       <body>
-        <div>
+        <HoneypotProvider {...data.honetpotProps}>
           <Outlet />
-        </div>
+        </HoneypotProvider>
         <ScrollRestoration />
         <Scripts />
       </body>

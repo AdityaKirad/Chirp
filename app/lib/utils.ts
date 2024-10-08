@@ -11,4 +11,6 @@ function generateUniqueId(length: number = 10) {
   return nanoid();
 }
 
-export { cn, generateUniqueId };
+const getExpirationDate = (time = 600) => new Date(Date.now() + time * 1000);
+
+export { cn, generateUniqueId, getExpirationDate };

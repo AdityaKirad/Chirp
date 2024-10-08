@@ -1,33 +1,23 @@
+import { Plunk } from "@plunk/node/dist/lib/Plunk";
 import { renderAsync } from "@react-email/components";
-import { Resend } from "resend";
 
-const resend = new Resend(process.env.Resend_API_KEY);
+const plunk = new Plunk(process.env.PLUNK_API_KEY);
 
 export async function sendEmail({
   react,
-  ...options
+  subject,
+  to,
 }: {
   to: string | Array<string>;
   subject: string;
-} & ({ html: string; text?: string; react?: never } | { html?: never; text?: never; react: React.ReactElement })) {
-  const from = "Chirp <onboarding@resend.dev>";
+  react: React.ReactElement;
+}) {
+  const body = await renderAsync(react);
 
-  const email = {
-    from,
-    ...options,
-    ...(react ? await renderReactEmail(react) : null),
-  };
-
-  return await resend.emails.send({
-    from: email.from,
-    to: email.to,
-    subject: email.subject,
-    html: email.html || undefined,
-    text: email.text || "",
+  return await plunk.emails.send({
+    to,
+    subject,
+    body,
+    type: "html",
   });
-}
-
-async function renderReactEmail(element: React.ReactElement) {
-  const [html, text] = await Promise.all([renderAsync(element), renderAsync(element, { plainText: true })]);
-  return { html, text };
 }

@@ -1,4 +1,5 @@
 import { createCookieSessionStorage } from "@remix-run/node";
+import { getExpirationDate } from "~/lib/utils";
 
 export const authSessionStorage = createCookieSessionStorage({
   cookie: {
@@ -18,8 +19,12 @@ Object.defineProperty(authSessionStorage, "commitSession", {
   value: async function commitSession(...args: Parameters<typeof originalCommitSession>) {
     const [session, options] = args;
 
-    if (options?.expires) session.set("expires", options.expires);
-    if (options?.maxAge) session.set("expires", new Date(Date.now() + options.maxAge * 1000));
+    if (options?.expires) {
+      session.set("expires", options.expires);
+    }
+    if (options?.maxAge) {
+      session.set("expires", getExpirationDate(options.maxAge));
+    }
 
     const expires = session.has("expires") ? new Date(session.get("expires")) : undefined;
 

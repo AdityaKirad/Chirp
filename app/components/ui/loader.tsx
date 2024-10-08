@@ -1,6 +1,6 @@
 import { cva, type VariantProps } from "class-variance-authority";
 
-const loaderVariants = cva("aspect-square loading", {
+const loaderVariants = cva("loading", {
   variants: {
     variant: {
       default: "bg-background",
@@ -16,5 +16,5 @@ const loaderVariants = cva("aspect-square loading", {
 });
 
 export function Loader({ variant, size }: VariantProps<typeof loaderVariants>) {
-  return <div className={loaderVariants({ size, variant })} />;
+  return <span className={loaderVariants({ size, variant })} />;
 }

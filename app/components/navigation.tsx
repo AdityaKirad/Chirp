@@ -1,6 +1,7 @@
 import { Button } from "./ui";
 import { NavLink } from "@remix-run/react";
 import { Bell, Bookmark, Home, List, Mail, Search, Settings, UserRound } from "lucide-react";
+import { Routes } from "remix-routes";
 import BrandLogo from "~/assets/logo-small.webp";
 
 export default function Navigation() {
@@ -22,7 +23,7 @@ export default function Navigation() {
   );
 }
 
-function NavigationLink({ href, icon, title }: { href: string; icon: JSX.Element; title: string }) {
+function NavigationLink({ href, icon, title }: { href: keyof Routes; icon: JSX.Element; title: string }) {
   return (
     <NavLink className="group block outline-none" to={href} title={title}>
       <span className="inline-flex items-center gap-2 rounded-full px-4 py-2 outline-white transition-[outline-color,background-color] duration-300 group-focus-visible:outline group-[.active]:font-semibold group-[:not(:focus-visible)]:group-hover:bg-neutral-800">

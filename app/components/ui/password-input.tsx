@@ -20,6 +20,7 @@ export const PasswordInput = forwardRef<HTMLInputElement, React.InputHTMLAttribu
         <button
           className="rounded-sm outline-none ring-offset-background focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
           type="button"
+          title={visible ? "Hide" : "Reveal"}
           onClick={() => visibleSet((prevState) => !prevState)}>
           {visible ? <EyeOff /> : <Eye />}
         </button>

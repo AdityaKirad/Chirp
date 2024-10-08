@@ -6,16 +6,6 @@ const config = {
   content: ["./app/**/*.{ts,tsx}"],
   prefix: "",
   theme: {
-    fontSize: {
-      sm: ["var(--fs-sm)", "1.25rem"],
-      base: ["var(--fs-base)", "1.5rem"],
-      lg: ["var(--fs-lg)", "1.75rem"],
-      xl: ["var(--fs-xl)", "1.75rem"],
-      "2xl": ["var(--fs-2xl)", "2rem"],
-      "3xl": ["var(--fs-3xl)", "2.25rem"],
-      "4xl": ["var(--fs-4xl)", "2.5rem"],
-      "5xl": ["var(--fs-5xl)", "1"],
-    },
     screens: {
       sm: "40em",
       md: "48em",
@@ -31,6 +21,12 @@ const config = {
       },
     },
     extend: {
+      fontSize: {
+        body: "var(--fs-body)",
+        heading: "var(--fs-heading)",
+        "auth-heading": "var(--fs-auth-heading)",
+        "auth-sub-heading": "var(--fs-auth-sub-heading)",
+      },
       colors: {
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
